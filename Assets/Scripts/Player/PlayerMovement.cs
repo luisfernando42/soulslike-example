@@ -52,7 +52,8 @@ public class PlayerMovement : MonoBehaviour
 
         moveDir = moveDir * movementSpeed;
 
-        Vector3 velocity = Vector3.ProjectOnPlane(moveDir, movementVector);
+        Vector3 velocity = Vector3.ProjectOnPlane(new Vector3(moveDir.x, 0, moveDir.z), movementVector);
+
         body.linearVelocity = velocity;
         animationManager.UpdateValues(inputManager.getMovementAmount(), 0);
     
