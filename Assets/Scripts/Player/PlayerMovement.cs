@@ -13,7 +13,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float movementSpeed = 6;
+    [SerializeField] private float sprintSpeed = 8;
     [SerializeField] private float rotationSpeed = 10;
+    private bool isSprinting = false;
 
 
     private void Initialize()
@@ -33,9 +35,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        isSprinting = inputManager.getRollInput();
         inputManager.TickInput();
         Move();
+
         if (animationManager.getCanRotate()) Rotate();
+            Roll();
 
     }
 
@@ -46,16 +51,26 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
+        if (inputManager.getIsRolling()) return;
+
         moveDir = cameraObject.forward * inputManager.getVerticalValue();
         moveDir += cameraObject.right * inputManager.getHorizontalValue();
         moveDir.Normalize();
 
-        moveDir = moveDir * movementSpeed;
+        
+
+        if(inputManager.getIsSprinting())
+        { 
+            moveDir = moveDir * sprintSpeed;
+            isSprinting = true; 
+
+        }
+        else moveDir = moveDir * movementSpeed;
 
         Vector3 velocity = Vector3.ProjectOnPlane(new Vector3(moveDir.x, 0, moveDir.z), movementVector);
 
         body.linearVelocity = velocity;
-        animationManager.UpdateValues(inputManager.getMovementAmount(), 0);
+        animationManager.UpdateValues(inputManager.getMovementAmount(), 0, isSprinting);
     
     }
 
@@ -75,7 +90,31 @@ public class PlayerMovement : MonoBehaviour
         Quaternion rotationDir = Quaternion.LookRotation(direction);
         Quaternion rotation = Quaternion.Slerp(playerTransform.rotation, rotationDir, rotationSpeed * Time.deltaTime);
 
+       
         playerTransform.rotation = rotation;
+    }
+
+    private void Roll()
+    {
+        if (animationManager.getIsInteracting()) return;
+
+        
+        if(inputManager.getIsRolling())
+        {
+            moveDir = cameraObject.forward * inputManager.getVerticalValue();
+            moveDir += cameraObject.right * inputManager.getHorizontalValue();
+
+            if (inputManager.getMovementAmount() > 0) 
+            {
+                animationManager.playAnimation(AnimationKeys.animations[AnimationsEnum.rolling], true);
+                moveDir.y = 0;
+                Quaternion rollRotation = Quaternion.LookRotation(moveDir);
+                transform.rotation = rollRotation;
+            } else
+            {
+                animationManager.playAnimation(AnimationKeys.animations[AnimationsEnum.backstep], true);
+            }
+        }
     }
 
     #endregion
@@ -85,6 +124,11 @@ public class PlayerMovement : MonoBehaviour
     public Transform getPlayerTransform()
     {
         return playerTransform;
+    }
+
+    public Rigidbody getPlayerRigidBody()
+    {
+        return body;
     }
     #endregion
 }
