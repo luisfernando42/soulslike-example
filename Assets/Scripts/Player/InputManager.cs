@@ -16,19 +16,9 @@ public class InputManager : MonoBehaviour
     private float rollInputTimer;
 
     private PlayerInputActions actions;
-    private CameraManager cameraManager;
     private Vector2 movementInput;
     private Vector2 cameraMovementInput;
 
-    private void Awake()
-    {
-        cameraManager = CameraManager.instance;
-    }
-
-    private void FixedUpdate()
-    {
-        HandleCamera();
-    }
 
     public void OnEnable()
     {
@@ -63,15 +53,7 @@ public class InputManager : MonoBehaviour
         mouseY = cameraMovementInput.y;
     }
 
-    private void HandleCamera()
-    {
-       
-        if (cameraManager != null)
-        {
-            cameraManager.FollowTarget();
-            cameraManager.Rotation(mouseX, mouseY);
-        }
-    }
+
 
     private void HandleRolling()
     {
@@ -139,6 +121,15 @@ public class InputManager : MonoBehaviour
     public bool getIsSprinting()
     {
        return isSprinting;
+    }
+
+    public float getMouseX()
+    {
+        return mouseX;
+    }
+    public float getMouseY()
+    {
+        return mouseY;
     }
     #endregion
 }

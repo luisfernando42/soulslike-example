@@ -14,6 +14,9 @@ public abstract class AnimationKeys
             { AnimationsEnum.rolling, "Rolling" },
             { AnimationsEnum.backstab, "Backstab" },
             { AnimationsEnum.backstep, "Backstep" },
+            { AnimationsEnum.falling, "Falling" },
+            { AnimationsEnum.land, "Landing" },
+            { AnimationsEnum.empty, "Empty" },
         };
 
 }

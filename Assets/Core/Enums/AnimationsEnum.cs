@@ -2,5 +2,5 @@ using UnityEngine;
 
 public enum AnimationsEnum
 {
-    rolling, backstab, backstep
+    rolling, backstab, backstep, falling, land, empty
 }
