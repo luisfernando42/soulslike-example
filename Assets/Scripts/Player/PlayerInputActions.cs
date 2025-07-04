@@ -202,6 +202,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a14676c-6d88-4aa4-926e-856bdfbae54e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HeavyAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b1fe6d1-4cd5-4404-8d64-11b04f139093"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -226,6 +244,50 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f78a7a0-c6a7-4f41-b5bc-1c80b21ee75a"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4657d00d-156a-4fb5-91e2-052dd9fdaf57"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd7dae07-80a8-489f-a401-b1c0ef62e514"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HeavyAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ed26139-7109-47f4-b862-06390d09d980"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HeavyAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -245,6 +307,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // Actions
         m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
         m_Actions_Roll = m_Actions.FindAction("Roll", throwIfNotFound: true);
+        m_Actions_LightAttack = m_Actions.FindAction("LightAttack", throwIfNotFound: true);
+        m_Actions_HeavyAttack = m_Actions.FindAction("HeavyAttack", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -434,6 +498,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Actions;
     private List<IActionsActions> m_ActionsActionsCallbackInterfaces = new List<IActionsActions>();
     private readonly InputAction m_Actions_Roll;
+    private readonly InputAction m_Actions_LightAttack;
+    private readonly InputAction m_Actions_HeavyAttack;
     /// <summary>
     /// Provides access to input actions defined in input action map "Actions".
     /// </summary>
@@ -449,6 +515,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Actions/Roll".
         /// </summary>
         public InputAction @Roll => m_Wrapper.m_Actions_Roll;
+        /// <summary>
+        /// Provides access to the underlying input action "Actions/LightAttack".
+        /// </summary>
+        public InputAction @LightAttack => m_Wrapper.m_Actions_LightAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Actions/HeavyAttack".
+        /// </summary>
+        public InputAction @HeavyAttack => m_Wrapper.m_Actions_HeavyAttack;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -478,6 +552,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Roll.started += instance.OnRoll;
             @Roll.performed += instance.OnRoll;
             @Roll.canceled += instance.OnRoll;
+            @LightAttack.started += instance.OnLightAttack;
+            @LightAttack.performed += instance.OnLightAttack;
+            @LightAttack.canceled += instance.OnLightAttack;
+            @HeavyAttack.started += instance.OnHeavyAttack;
+            @HeavyAttack.performed += instance.OnHeavyAttack;
+            @HeavyAttack.canceled += instance.OnHeavyAttack;
         }
 
         /// <summary>
@@ -492,6 +572,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Roll.started -= instance.OnRoll;
             @Roll.performed -= instance.OnRoll;
             @Roll.canceled -= instance.OnRoll;
+            @LightAttack.started -= instance.OnLightAttack;
+            @LightAttack.performed -= instance.OnLightAttack;
+            @LightAttack.canceled -= instance.OnLightAttack;
+            @HeavyAttack.started -= instance.OnHeavyAttack;
+            @HeavyAttack.performed -= instance.OnHeavyAttack;
+            @HeavyAttack.canceled -= instance.OnHeavyAttack;
         }
 
         /// <summary>
@@ -574,5 +660,19 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRoll(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LightAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLightAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HeavyAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHeavyAttack(InputAction.CallbackContext context);
     }
 }

@@ -44,8 +44,11 @@ public class PlayerManager : MonoBehaviour
     private void LateUpdate()
     {
         inputManager.SetIsSprinting(false);
+        inputManager.SetIsRolling(false);
         inputManager.ResetRollInput();
-        isSprinting = inputManager.getRollInput();
+        inputManager.ResetLightAttackInput();
+        inputManager.ResetHeavyAttackInput();
+
         HandleFall();
     }
 

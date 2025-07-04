@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject freeCamera;
 
     [Header("Movement")]
+    [SerializeField] private float walkingSpeed = 3;
     [SerializeField] private float movementSpeed = 6;
     [SerializeField] private float sprintSpeed = 8;
     [SerializeField] private float rotationSpeed = 10;
@@ -60,13 +61,21 @@ public class PlayerMovement : MonoBehaviour
 
         
 
-        if(inputManager.getIsSprinting())
+        if(inputManager.getIsSprinting() && inputManager.getMovementAmount() > 0.5f)
         { 
             moveDir = moveDir * sprintSpeed;
             playerManager.setIsSprinting(true); 
 
         }
-        else moveDir = moveDir * movementSpeed;
+        else
+        {
+            if (inputManager.getMovementAmount() < 0.5f)
+            {
+                moveDir = moveDir * walkingSpeed;
+                playerManager.setIsSprinting(false);
+            }
+            else { moveDir = moveDir * movementSpeed; playerManager.setIsSprinting(false); }
+        }
 
         Vector3 velocity = Vector3.ProjectOnPlane(new Vector3(moveDir.x, 0, moveDir.z), movementVector);
 
@@ -156,8 +165,7 @@ public class PlayerMovement : MonoBehaviour
             if(playerManager.getIsFalling())
             {
                 if(fallingTimer > 0.5f)
-                {
-                    Debug.Log("You were in the air for: " + fallingTimer);
+                { 
                     animationManager.playAnimation(AnimationKeys.animations[AnimationsEnum.land], true);
                 } else
                 {

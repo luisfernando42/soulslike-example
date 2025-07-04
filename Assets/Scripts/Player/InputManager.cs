@@ -10,15 +10,26 @@ public class InputManager : MonoBehaviour
     private float movementAmount;
     private float mouseX;
     private float mouseY;
+    
     private bool rollInput;
+    private bool lightAttackInput;
+    private bool heavyAttackInput;
+
     private bool isRolling;
     private bool isSprinting;
     private float rollInputTimer;
 
     private PlayerInputActions actions;
+    private PlayerAttacker attacker;
+    private Inventory inventory;
     private Vector2 movementInput;
     private Vector2 cameraMovementInput;
 
+    private void Awake()
+    {
+        attacker = GetComponent<PlayerAttacker>();
+        inventory = GetComponent<Inventory>();
+    }
 
     public void OnEnable()
     {
@@ -39,12 +50,13 @@ public class InputManager : MonoBehaviour
 
     public void TickInput()
     {
-      
-        MovementInput();
+
+        HandleMovement();
         HandleRolling();
+        HandleAttack();
     }
 
-    public void MovementInput()
+    public void HandleMovement()
     {
         horizontalValue = movementInput.x;
         verticalValue = movementInput.y;
@@ -75,6 +87,22 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private void HandleAttack()
+    {
+        lightAttackInput = actions.Actions.LightAttack.IsPressed();
+        heavyAttackInput = actions.Actions.HeavyAttack.IsPressed();
+
+        if (lightAttackInput)
+        {
+            attacker.HandleLightAttack(inventory.rightWeapon);
+        }
+
+        if (heavyAttackInput)
+        {
+            attacker.HandleHeavyAttack(inventory.rightWeapon);
+        }
+    }
+
     public void ResetRollInput()
     {
         rollInput = false; 
@@ -88,6 +116,15 @@ public class InputManager : MonoBehaviour
     public void SetIsSprinting(bool value)
     {
         isSprinting = value;
+    }
+
+    public void ResetLightAttackInput()
+    {
+        lightAttackInput = false;
+    }
+    public void ResetHeavyAttackInput()
+    {
+        heavyAttackInput = false;
     }
 
     #region Getters
