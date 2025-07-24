@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -9,11 +8,12 @@ public class PlayerManager : MonoBehaviour
     private bool isSprinting = false;
     private bool isFalling;
     private bool isGrounded;
+    private bool canCombo;
     private CameraManager cameraManager;
     private PlayerMovement playerMovement;
     private void Awake()
     {
-        cameraManager = CameraManager.instance;
+        cameraManager = FindAnyObjectByType<CameraManager>();
     }
 
     void Start()
@@ -24,10 +24,11 @@ public class PlayerManager : MonoBehaviour
 
     }
 
-   
+
     void Update()
     {
         isInteracting = animator.GetBool(AnimationKeys.INTERACTING);
+        canCombo = animator.GetBool(AnimationKeys.COMBO);
 
         inputManager.TickInput();
         playerMovement.Move();
@@ -92,6 +93,11 @@ public class PlayerManager : MonoBehaviour
         return isGrounded;
     }
 
+    public bool getCanCombo()
+    {
+        return canCombo;
+    }
+
     #endregion
 
     #region Setters
@@ -102,7 +108,7 @@ public class PlayerManager : MonoBehaviour
 
     public void setIsGrounded(bool value)
     {
-        isGrounded = value; 
+        isGrounded = value;
     }
 
     public void setIsFalling(bool value)

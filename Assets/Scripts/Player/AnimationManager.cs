@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class AnimationManager : MonoBehaviour
 {
@@ -35,7 +34,7 @@ public class AnimationManager : MonoBehaviour
         else
             horizontal = 0;
 
-        if(isSprinting)
+        if (isSprinting)
         {
             vertical = 2;
             horizontal = horizontalMovement;
@@ -52,6 +51,15 @@ public class AnimationManager : MonoBehaviour
         animator.CrossFade(animation, 0.2f);
     }
 
+    public void EnableCombo()
+    {
+        animator.SetBool(AnimationKeys.COMBO, true);
+    }
+
+    public void DisableCombo()
+    {
+        animator.SetBool(AnimationKeys.COMBO, false);
+    }
     private void OnAnimatorMove()
     {
         if (!animator.GetBool(AnimationKeys.INTERACTING)) return;
@@ -69,10 +77,15 @@ public class AnimationManager : MonoBehaviour
         canRotate = value;
     }
 
+    public void setCanCombo(bool value)
+    {
+        animator.SetBool(AnimationKeys.COMBO, value);
+    }
     public bool getCanRotate()
     {
         return canRotate;
     }
+
 
     public bool getIsInteracting()
     {

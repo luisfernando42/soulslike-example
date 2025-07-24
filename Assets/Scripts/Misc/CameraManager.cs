@@ -42,6 +42,8 @@ public class CameraManager : MonoBehaviour
         Initialize();
         cameraZ = cameraObj.position.z;
         mask = ~(1 << 9 | 1 << 9 | 1 << 10);
+        target = FindAnyObjectByType<PlayerManager>().transform;
+
     }
 
     public void FollowTarget()

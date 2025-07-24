@@ -5,7 +5,7 @@ public class WeaponHolder : MonoBehaviour
     public Transform parentObj;
     public bool isOnLeftHand;
     public bool isOnRightHand;
-    private GameObject currentWeapon;
+    public GameObject currentWeapon { get; private set; }
 
     public void LoadWeapon(WeaponItem weapon)
     {
@@ -50,4 +50,6 @@ public class WeaponHolder : MonoBehaviour
             Destroy(currentWeapon);
         }
     }
+
+
 }

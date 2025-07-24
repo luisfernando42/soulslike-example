@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 
 public class InputManager : MonoBehaviour
@@ -10,17 +9,19 @@ public class InputManager : MonoBehaviour
     private float movementAmount;
     private float mouseX;
     private float mouseY;
-    
+
     private bool rollInput;
     private bool lightAttackInput;
     private bool heavyAttackInput;
 
     private bool isRolling;
     private bool isSprinting;
+    private bool isPerformingCombo;
     private float rollInputTimer;
 
     private PlayerInputActions actions;
     private PlayerAttacker attacker;
+    private PlayerManager playerManager;
     private Inventory inventory;
     private Vector2 movementInput;
     private Vector2 cameraMovementInput;
@@ -29,17 +30,18 @@ public class InputManager : MonoBehaviour
     {
         attacker = GetComponent<PlayerAttacker>();
         inventory = GetComponent<Inventory>();
+        playerManager = GetComponent<PlayerManager>();
     }
 
     public void OnEnable()
     {
-      if (actions == null) 
-      {
-        actions = new PlayerInputActions();
-        actions.Movement.Move.performed += actions => movementInput = actions.ReadValue<Vector2>();
-        actions.Movement.CameraMovement.performed += i => cameraMovementInput = i.ReadValue<Vector2>(); 
-        
-      }
+        if (actions == null)
+        {
+            actions = new PlayerInputActions();
+            actions.Movement.Move.performed += actions => movementInput = actions.ReadValue<Vector2>();
+            actions.Movement.CameraMovement.performed += i => cameraMovementInput = i.ReadValue<Vector2>();
+
+        }
         actions.Enable();
     }
 
@@ -74,11 +76,12 @@ public class InputManager : MonoBehaviour
         if (rollInput)
         {
             rollInputTimer += Time.deltaTime;
-            if(movementAmount > 0)
+            if (movementAmount > 0)
                 SetIsSprinting(true);
-        } else
+        }
+        else
         {
-            if(rollInputTimer > 0 && rollInputTimer < 0.5f)
+            if (rollInputTimer > 0 && rollInputTimer < 0.5f)
             {
                 SetIsSprinting(false);
                 SetIsRolling(true);
@@ -94,18 +97,31 @@ public class InputManager : MonoBehaviour
 
         if (lightAttackInput)
         {
-            attacker.HandleLightAttack(inventory.rightWeapon);
+            if (playerManager.getCanCombo())
+            {
+                isPerformingCombo = true;
+                attacker.HandleCombo(inventory.rightWeapon);
+                isPerformingCombo = false;
+            }
+            else
+            {
+                if (playerManager.getIsInteracting()) return;
+                if (playerManager.getCanCombo()) return;
+                attacker.HandleLightAttack(inventory.rightWeapon);
+            }
         }
 
         if (heavyAttackInput)
         {
+            if (playerManager.getIsInteracting()) return;
+            if (playerManager.getCanCombo()) return;
             attacker.HandleHeavyAttack(inventory.rightWeapon);
         }
     }
 
     public void ResetRollInput()
     {
-        rollInput = false; 
+        rollInput = false;
     }
 
     public void SetIsRolling(bool value)
@@ -157,7 +173,12 @@ public class InputManager : MonoBehaviour
 
     public bool getIsSprinting()
     {
-       return isSprinting;
+        return isSprinting;
+    }
+
+    public bool getIsMidCombo()
+    {
+        return isPerformingCombo;
     }
 
     public float getMouseX()

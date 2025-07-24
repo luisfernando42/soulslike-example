@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6004874341212763933}
   - component: {fileID: 3286022716491622656}
   - component: {fileID: 6573498848536454906}
+  - component: {fileID: 6743596778755329059}
+  - component: {fileID: 9017003884212087051}
   m_Layer: 0
   m_Name: BaseballBatModel
   m_TagString: Untagged
@@ -109,6 +111,40 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5d4d8c275aacdd943b94b26940482a2e, type: 3}
+--- !u!65 &6743596778755329059
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490253246290638468}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1202686, y: 0.9942376, z: 0.120268546}
+  m_Center: {x: 0.00000069810795, y: 0.6481373, z: -0.0000021469561}
+--- !u!114 &9017003884212087051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490253246290638468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00a01c5eace40924e8b09ced81a5c5bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 25
 --- !u!1 &3679522200603984796
 GameObject:
   m_ObjectHideFlags: 0

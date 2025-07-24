@@ -86,6 +86,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Rotate()
     {
+        if (animationManager.getIsInteracting()) return;
+
         if (animationManager.getCanRotate())
         {
             Vector3 rotateDir = Vector3.zero;
@@ -200,17 +202,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (playerManager.getIsGrounded())
-        {
+
             if (playerManager.getIsInteracting() || inputManager.getMovementAmount() > 0)
             {
-                transform.position = Vector3.Lerp(transform.position, direction, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, direction, Time.deltaTime / 0.1f);
             }
             else
             {
                 transform.position = direction;
             }
-        }
+        
 
     }
 
